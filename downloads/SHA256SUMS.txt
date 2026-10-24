@@ -1,2 +1,0 @@
-3fe7f88cf3f3f789d8b6653c4faa5a9ab1b9bb0d1d20ab04fec70bacb5e83f2e  PartTrace-2026.10.0-Preview-Setup.exe
-7763046a120beee769dee88813159584552e2dd3454817c0db3523ff213b0759  PartTrace-Android.apk

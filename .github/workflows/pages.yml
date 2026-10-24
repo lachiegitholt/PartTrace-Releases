@@ -19,17 +19,14 @@ concurrency:
 
 jobs:
   prepare:
-    name: Verify downloads and prepare the website
+    name: Check the download links and prepare the website
     runs-on: ubuntu-latest
-    outputs:
-      preview: ${{ steps.metadata.outputs.preview }}
-      tag: ${{ steps.metadata.outputs.tag }}
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
         with: {node-version: "24"}
-      - name: Verify installer checksums and download metadata
-        id: metadata
+      # Testing previews are published here by the source repository's preview workflow.
+      - name: Check the download links
         run: node verify-downloads.mjs
       - name: Prepare only the website files
         run: |
@@ -42,34 +39,6 @@ jobs:
           include-hidden-files: true
           if-no-files-found: error
           retention-days: 30
-
-  publish-preview:
-    name: Make the private test installers available
-    needs: prepare
-    if: needs.prepare.outputs.preview == 'true'
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@v7
-      - name: Publish only inside a private repository
-        env:
-          GH_TOKEN: ${{ github.token }}
-          PREVIEW_TAG: ${{ needs.prepare.outputs.tag }}
-        run: |
-          set -euo pipefail
-          private="$(gh repo view "$GITHUB_REPOSITORY" --json isPrivate --jq .isPrivate)"
-          if [ "$private" != true ]; then
-            echo "Unsigned test installers are published only while this repository is private."
-            exit 1
-          fi
-          if gh release view "$PREVIEW_TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
-            echo "This preview is already published. Existing files are kept."
-          else
-            gh release create "$PREVIEW_TAG" --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
-              --prerelease --title "PartTrace 2026.10.0 testing preview" \
-              --notes-file downloads/INSTALL.txt downloads/*.exe downloads/*.apk downloads/SHA256SUMS.txt downloads/INSTALL.txt
-          fi
 
   deploy-pages:
     name: Publish the public website only when explicitly selected

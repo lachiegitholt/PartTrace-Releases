@@ -1,34 +1,34 @@
-# PartTrace downloads — private testing
+# Get PartTrace
 
-This repository contains the download website and a tested installation preview. It stays private
-while testing. The Windows installer is unsigned; the Android app is release-signed.
+Install PartTrace on the Windows computer that stays in your workshop. Everything it needs is
+included, and it starts by itself with the computer.
 
-## Installers
+### [Download PartTrace for Windows ↓](https://github.com/lachiegitholt/PartTrace-Releases/releases/download/preview/PartTrace-Setup.exe)
 
-- [Windows installer](https://github.com/lachiegitholt/PartTrace-Releases/releases/download/preview-2026.10.0-95a42067/PartTrace-2026.10.0-Preview-Setup.exe)
-- [Android app](https://github.com/lachiegitholt/PartTrace-Releases/releases/download/preview-2026.10.0-95a42067/PartTrace-Android.apk)
-- [Preview release](https://github.com/lachiegitholt/PartTrace-Releases/releases/tag/preview-2026.10.0-95a42067)
+<!-- preview-version -->Preview 2026.10.0 · build c074c832 · 46 MB · Windows 10 or later, 64-bit<!-- /preview-version -->
 
-The Downloads and Pages workflow verifies the files and publishes the preview into this private
-repository. The same files are in `downloads/`, with SHA-256 checksums. The Windows installer passed
-a fresh installation, HTTPS account setup, and updater registration on a disposable Windows runner.
-Application source and signing keys are kept in a separate private repository.
+**Setting up a phone or another computer?** Don't download anything here. Join the Wi-Fi of your
+workshop, then in PartTrace open **Settings → People → Add a device** and scan the code.
 
-## GitHub Pages
+## Installing
 
-The website is ready in `index.html`, `page.css`, `page.js` and `release.json`. Every push validates
-the installer files and saves a `download-page` artifact for testing. No website is published
-automatically.
+1. **Keep the file if your browser asks.** In Edge, choose **…** → **Keep** → **Keep anyway**. In
+   Chrome, choose **Keep**.
+2. **Open it from your downloads.** If Windows says it protected your PC, choose **More info** →
+   **Run anyway**, then **Yes**.
+3. **Accept the licence and choose Install.** It takes about a minute.
+4. **Create your account.** PartTrace opens in your browser. Save your recovery code, then follow
+   the guide to set up backups and connect your first phone.
 
-**A private repository does not make its Pages website private.** Private Pages access control
-requires an eligible GitHub Enterprise organisation. Keep deployment disabled during private testing.
-See [GitHub's Pages access-control documentation](https://docs.github.com/en/enterprise-cloud@latest/pages/getting-started-with-github-pages/changing-the-visibility-of-your-github-pages-site).
+Windows asks because this testing preview is not signed yet. Use it only if that meets your
+organisation's installation policy.
 
-When ready to publish publicly:
+## Other files
 
-1. Open Settings → Pages and select **GitHub Actions** as the source (an eligible Pages plan is required for a private repository).
-2. Open Actions → Downloads and Pages → Run workflow.
-3. Select **Publish the website publicly**, then run it.
+The [preview release](https://github.com/lachiegitholt/PartTrace-Releases/releases/tag/preview)
+also has the Android app and `SHA256SUMS.txt` with checksums. Each new preview replaces these files,
+so the links on this page stay the same.
 
-The expected public address is `https://lachiegitholt.github.io/PartTrace-Releases/`. The workflow
-uploads only the four website files and `.nojekyll`, not the private installer folder or Git history.
+---
+
+Maintaining this repository: see [MAINTAINING.md](MAINTAINING.md).
