@@ -44,7 +44,11 @@ async function release() {
     byId("android").hidden = !data.android;
     byId("preview-note").hidden = data.preview !== true;
     byId("release-status").textContent = data.preview ? `Preview ${data.version} · Unsigned Windows installer` : `Version ${data.version} · Includes everything you need`;
-    byId("installer").addEventListener("click", () => { byId("release-status").textContent = "After the download, open the installer from your browser’s Downloads."; }, { once: true });
+    byId("installer").addEventListener("click", () => {
+      // The unsigned-download prompts are where people give up, so the way past them appears as the download starts.
+      byId("after-download").hidden = false;
+      byId("after-download").focus();
+    });
   } catch {
     byId("release-status").textContent = "The installer could not be loaded.";
     byId("release-error").textContent = "Check your connection and try again, or open the releases link under Other options. If your workshop is offline, download the installer on another computer and copy it across.";

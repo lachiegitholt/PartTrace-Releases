@@ -266,6 +266,20 @@ summary {
   margin-bottom: 0;
   color: var(--muted);
 }
+.guide:focus {
+  outline: none;
+}
+.guide ol {
+  margin: 0.75rem 0 0;
+  padding-left: 1.25rem;
+  display: grid;
+  gap: 0.6rem;
+  color: var(--muted);
+}
+.guide li b {
+  color: var(--fg);
+  font-weight: 600;
+}
 form {
   display: flex;
   flex-direction: column;
