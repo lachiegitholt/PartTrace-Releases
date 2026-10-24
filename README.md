@@ -5,7 +5,7 @@ included, and it starts by itself with the computer.
 
 ### [Download PartTrace for Windows ↓](https://github.com/lachiegitholt/PartTrace-Releases/releases/download/preview/PartTrace-Setup.exe)
 
-<!-- preview-version -->Preview 2026.10.0 · build c074c832 · 46 MB · Windows 10 or later, 64-bit<!-- /preview-version -->
+<!-- preview-version -->Preview 2026.10.0 · build df755651 · 46 MB · Windows 10 or later, 64-bit<!-- /preview-version -->
 
 **Setting up a phone or another computer?** Don't download anything here. Join the Wi-Fi of your
 workshop, then in PartTrace open **Settings → People → Add a device** and scan the code.
