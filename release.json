@@ -3,7 +3,7 @@
   "available": true,
   "preview": true,
   "tag": "preview",
-  "build": "df755651",
+  "build": "74647928",
   "installer": "https://github.com/lachiegitholt/PartTrace-Releases/releases/download/preview/PartTrace-Setup.exe",
   "android": "https://github.com/lachiegitholt/PartTrace-Releases/releases/download/preview/PartTrace-Android.apk",
   "releases": "https://github.com/lachiegitholt/PartTrace-Releases/releases/tag/preview"

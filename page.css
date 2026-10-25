@@ -1,36 +1,94 @@
 /* Copyright (c) 2026 Lachie Holt. All rights reserved. See LICENSE. */
 
+/* The public download page, drawn like the app it installs: IBM Plex, the app's grounds and lines,
+   square keys with the bracketed primary, and the orange glow under the top bar. On a wide screen
+   the headline and the choice stand on the left and what to do next fills the right. */
+
+@font-face {
+  font-family: "IBM Plex Sans";
+  font-style: normal;
+  font-weight: 200;
+  font-display: swap;
+  src: url("./fonts/ibm-plex-sans-latin-200-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "IBM Plex Sans";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./fonts/ibm-plex-sans-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "IBM Plex Sans";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("./fonts/ibm-plex-sans-latin-500-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./fonts/ibm-plex-mono-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("./fonts/ibm-plex-mono-latin-500-normal.woff2") format("woff2");
+}
+
 :root {
   color-scheme: light dark;
-  --bg: #e9ebed;
-  --panel: #f6f7f8;
+  --ground: #e9ebed;
+  --panel: rgb(255 255 255 / 0.55);
+  --raise: rgb(24 24 27 / 0.06);
   --fg: #27272a;
-  --muted: #58585f;
-  --edge: #c5c8cc;
+  --dim: #58585f;
+  --bright: #18181b;
+  --line: rgb(24 24 27 / 0.08);
+  --edge: rgb(24 24 27 / 0.16);
   --accent: #ff4d00;
   --accent-text: #a83200;
+  --on-accent: #101113;
   --danger: #ab2e2e;
-  font-family: "Segoe UI", system-ui, sans-serif;
+  --glow: rgb(255 77 0 / 0.1);
+  --sans: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+  --gutter: clamp(1rem, 2.2vw, 2.5rem);
+  --control: 3rem;
+  font-family: var(--sans);
   font-size: 16px;
   line-height: 1.5;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #0b0d0f;
-    --panel: #15181b;
+    --ground: #0b0d0f;
+    --panel: rgb(255 255 255 / 0.06);
+    --raise: rgb(255 255 255 / 0.11);
     --fg: #dfe3e5;
-    --muted: #a2a8ae;
-    --edge: #363c42;
+    --dim: #939ba1;
+    --bright: #fff;
+    --line: rgb(255 255 255 / 0.08);
+    --edge: rgb(255 255 255 / 0.16);
     --accent-text: #ff8755;
     --danger: #ff8b82;
+    --glow: rgb(255 77 0 / 0.14);
   }
 }
 * {
   box-sizing: border-box;
 }
 body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   margin: 0;
-  background: var(--bg);
+  background:
+    radial-gradient(60rem 26rem at 50% -6rem, var(--glow), transparent 70%) no-repeat,
+    var(--ground);
   color: var(--fg);
 }
 [hidden] {
@@ -64,97 +122,120 @@ a:focus-visible,
 input:focus-visible,
 summary:focus-visible {
   outline: 2px solid var(--accent-text);
-  outline-offset: 4px;
+  outline-offset: 2px;
 }
+
+/* The bars: brand on the left, the promise on the right, like the app's top bar. */
 header,
 footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
-  padding: 1.3rem clamp(1rem, 5vw, 4rem);
-  border-bottom: 1px solid var(--edge);
+  padding: 1.1rem var(--gutter);
+}
+header {
+  border-bottom: 1px solid var(--accent);
+}
+footer {
+  margin-top: auto;
+  border-top: 1px solid var(--line);
 }
 .brand {
   display: flex;
-  gap: 1rem;
+  gap: 1.2rem;
   align-items: center;
+  color: var(--accent-text);
+  font: 400 0.95rem var(--mono);
+  letter-spacing: 0.2em;
   text-decoration: none;
-  font:
-    600 1rem ui-monospace,
-    monospace;
-  letter-spacing: 0.12em;
 }
 .brand span {
-  color: var(--fg);
-  font-size: 0.75rem;
+  color: var(--bright);
+  font-size: 0.8rem;
 }
 .eyebrow,
 .number,
 footer {
-  font:
-    0.7rem ui-monospace,
-    monospace;
-  letter-spacing: 0.12em;
-  color: var(--muted);
+  color: var(--dim);
+  font: 400 0.72rem var(--mono);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+.intro > .eyebrow,
+.section-head > .eyebrow {
+  color: var(--accent-text);
 }
 header > .eyebrow {
   text-align: right;
 }
+
 main {
-  max-width: 72rem;
-  margin: auto;
-  padding: 4rem clamp(1rem, 5vw, 4rem);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 3rem;
+  width: 100%;
+  padding: clamp(2.5rem, 6vw, 5rem) var(--gutter) 4rem;
 }
-.intro {
-  max-width: 42rem;
-  margin-bottom: 3rem;
+.lede,
+.paths {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  min-width: 0;
 }
 h1 {
-  font-size: clamp(3rem, 7vw, 5.4rem);
-  font-weight: 500;
-  line-height: 1.02;
-  letter-spacing: -0.055em;
-  margin: 1rem 0 1.5rem;
+  margin: 0.9rem 0 1.4rem;
+  color: var(--bright);
+  font-size: clamp(3rem, 6.4vw, 6.25rem);
+  font-weight: 200;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
 }
 .lead {
-  font-size: 1.1rem;
-  color: var(--muted);
   max-width: 36rem;
+  margin: 0;
+  color: var(--fg);
+  font-size: 1.15rem;
 }
+
+/* The two ways in, as one strip of keys with the chosen one lit. */
 .choices {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1px;
-  background: var(--edge);
-  border: 1px solid var(--edge);
-  margin-bottom: 3rem;
+  gap: 2px;
+  max-width: 48rem;
 }
 .choices button {
   display: flex;
   align-items: start;
   gap: 1rem;
+  min-width: 0;
+  padding: 1.3rem 1.4rem;
+  border: 1px solid var(--edge);
   background: var(--panel);
   color: var(--fg);
-  padding: 1.4rem;
-  border: 0;
-  border-top: 3px solid transparent;
   text-align: left;
-  min-width: 0;
+  transition: background-color 120ms ease-out;
+}
+.choices button:hover {
+  background: var(--raise);
 }
 .choices button[aria-pressed="true"] {
-  border-top-color: var(--accent);
-  background: var(--bg);
+  background: var(--raise);
+  box-shadow: inset 0 -2px var(--accent);
 }
 .choices strong {
   display: block;
-  font-size: 1.15rem;
-  font-weight: 600;
+  color: var(--bright);
+  font-size: 1.1rem;
+  font-weight: 500;
 }
 .choices small {
   display: block;
-  color: var(--muted);
   margin-top: 0.35rem;
+  color: var(--dim);
   font-size: 0.9rem;
 }
 .choices button > span:last-child {
@@ -164,92 +245,168 @@ h1 {
 .number {
   padding-top: 0.3rem;
 }
+
 section {
-  max-width: 48rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  min-width: 0;
+}
+.section-head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 .section-head p {
-  color: var(--muted);
+  max-width: 44rem;
+  margin: 0;
+  color: var(--dim);
 }
 h2 {
-  font-size: clamp(1.5rem, 4vw, 2rem);
-  font-weight: 500;
-  letter-spacing: -0.025em;
-  margin: 0.6rem 0;
+  margin: 0;
+  color: var(--bright);
+  font-size: clamp(1.6rem, 3vw, 2.25rem);
+  font-weight: 200;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
 }
 .download-box {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1.5rem;
-  background: var(--panel);
   padding: 1.5rem;
   border: 1px solid var(--edge);
-  margin-top: 1.5rem;
+  background: var(--panel);
 }
 .download-box strong {
-  font-size: 1.1rem;
+  color: var(--bright);
+  font-size: 1.2rem;
+  font-weight: 500;
 }
 .download-box p {
   margin: 0.3rem 0 0;
-  color: var(--muted);
-  font-size: 0.875rem;
+  color: var(--dim);
+  font: 400 0.8rem var(--mono);
+  letter-spacing: 0.04em;
 }
-.primary {
+
+/* Keys: square, mono and spaced like the app's; the primary one bracketed in the accent. */
+.primary,
+.secondary {
   display: inline-flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 1.5rem;
-  min-height: 48px;
-  background: var(--accent);
-  border: 1px solid var(--accent);
-  color: #101113;
-  padding: 0.7rem 1rem;
+  justify-content: center;
+  gap: 0.75rem;
+  min-height: var(--control);
+  padding: 0 1.4rem;
+  border: 1px solid var(--edge);
+  border-radius: 0;
+  background: var(--panel);
+  color: var(--bright);
+  font: 500 0.82rem var(--mono);
+  letter-spacing: 0.16em;
   text-decoration: none;
-  font-weight: 600;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.secondary:hover {
+  background: var(--raise);
+}
+.primary {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--on-accent);
+}
+.primary:hover {
+  filter: brightness(1.08);
+}
+.primary::before {
+  content: "[" / "";
+  opacity: 0.55;
+}
+.primary::after {
+  content: "]" / "";
+  opacity: 0.55;
 }
 .note {
-  color: var(--muted);
+  margin: 0;
+  color: var(--dim);
   font-size: 0.875rem;
 }
 .error {
+  margin: 0;
   color: var(--danger);
 }
+
+/* What happens next: three tiles side by side, seamed like the app's record tiles. */
 .steps {
-  list-style: none;
-  padding: 0;
-  margin: 2rem 0;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1.5rem;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.steps li {
+  padding: 1.1rem 1.25rem;
+  border: 1px solid var(--line);
+  background: var(--panel);
 }
 .steps li > span {
   display: block;
+  margin-bottom: 0.6rem;
   color: var(--accent-text);
-  font:
-    0.8rem ui-monospace,
-    monospace;
-  margin-bottom: 0.7rem;
+  font: 400 0.72rem var(--mono);
+  letter-spacing: 0.2em;
+}
+.steps li > span::before {
+  content: "Step ";
 }
 .steps strong {
-  font-weight: 600;
+  color: var(--bright);
+  font-weight: 500;
 }
 .steps p {
+  margin: 0.4rem 0 0;
+  color: var(--dim);
   font-size: 0.9rem;
-  color: var(--muted);
-  margin-top: 0.4rem;
 }
+
 details {
-  border-top: 1px solid var(--edge);
-  margin-top: 1rem;
+  border-top: 1px solid var(--line);
 }
 summary {
-  padding: 1rem 0;
-  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
   min-height: 48px;
+  color: var(--bright);
+  font: 500 0.8rem var(--mono);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  list-style: none;
+  cursor: pointer;
+}
+summary::-webkit-details-marker {
+  display: none;
+}
+summary::before {
+  content: "›";
+  color: var(--accent-text);
+  font-size: 1.1rem;
+  transition: transform 120ms ease-out;
+}
+details[open] > summary::before {
+  transform: rotate(90deg);
 }
 .other {
   padding-bottom: 1rem;
-  color: var(--muted);
+  color: var(--dim);
+}
+.other strong {
+  color: var(--fg);
+  font-weight: 500;
 }
 .other a {
   display: inline-block;
@@ -257,69 +414,94 @@ summary {
   padding: 0.6rem 0;
 }
 .callout {
+  margin: 0;
+  padding: 1.25rem;
+  border: 1px solid var(--line);
   border-left: 3px solid var(--accent);
   background: var(--panel);
-  padding: 1.25rem;
-  margin: 1.5rem 0;
+}
+.callout strong {
+  color: var(--bright);
+  font-weight: 500;
 }
 .callout p {
-  margin-bottom: 0;
-  color: var(--muted);
+  margin: 0.4rem 0 0;
+  color: var(--dim);
 }
 .guide:focus {
   outline: none;
 }
 .guide ol {
-  margin: 0.75rem 0 0;
-  padding-left: 1.25rem;
   display: grid;
   gap: 0.6rem;
-  color: var(--muted);
+  margin: 0.75rem 0 0;
+  padding-left: 1.25rem;
+  color: var(--dim);
 }
 .guide li b {
   color: var(--fg);
-  font-weight: 600;
+  font-weight: 500;
 }
+
+/* Joining by address: fields drawn as the app draws them, label above. */
 form {
   display: flex;
   flex-direction: column;
   align-items: stretch;
   gap: 0.6rem;
-  max-width: 30rem;
+  max-width: 32rem;
   padding-bottom: 1rem;
 }
 form label {
   margin-top: 0.6rem;
-  font-weight: 600;
+  color: var(--dim);
+  font: 400 0.72rem var(--mono);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+form label .note {
+  font: inherit;
+  letter-spacing: inherit;
+  opacity: 0.75;
 }
 input {
-  border: 1px solid var(--edge);
-  background: var(--panel);
-  color: var(--fg);
-  padding: 0.75rem;
-  min-height: 48px;
   min-width: 0;
+  min-height: var(--control);
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--edge);
   border-radius: 0;
+  background: var(--panel);
+  color: var(--bright);
+}
+input:focus {
+  border-color: var(--accent);
+  outline: none;
 }
 form p {
   margin: 0.3rem 0;
 }
 form .primary {
+  align-self: flex-start;
   margin-top: 0.5rem;
 }
-footer {
-  border-top: 1px solid var(--edge);
-  border-bottom: 0;
-  line-height: 1.5;
-  letter-spacing: 0;
-}
-@media (max-width: 45em) {
+
+@media (min-width: 64em) {
   main {
-    padding-top: 2.5rem;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    gap: clamp(3rem, 6vw, 7rem);
+    align-items: start;
+  }
+  .lede {
+    position: sticky;
+    top: 2.5rem;
   }
   .choices {
-    grid-template-columns: 1fr;
-    margin-bottom: 2rem;
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 45em) {
+  .choices {
+    grid-template-columns: minmax(0, 1fr);
   }
   .download-box {
     align-items: stretch;
@@ -327,15 +509,7 @@ footer {
     gap: 1rem;
   }
   .steps {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-  .steps li {
-    display: flex;
-    gap: 1rem;
-  }
-  .steps li > span {
-    margin: 0.1rem 0 0;
+    grid-template-columns: minmax(0, 1fr);
   }
   header > .eyebrow {
     max-width: 9rem;
